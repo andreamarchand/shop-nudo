@@ -890,6 +890,109 @@
     letter-spacing: 0.1em;
   }
 
+  /* ─── PROMO POPUP ─── */
+  .promo-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.82);
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(4px);
+    padding: 1.5rem;
+  }
+
+  .promo-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .promo-box {
+    background: var(--white);
+    max-width: 460px;
+    width: 100%;
+    padding: 3rem 2.5rem 2.5rem;
+    position: relative;
+    text-align: center;
+    transform: translateY(20px) scale(0.98);
+    transition: transform 0.4s ease;
+  }
+
+  .promo-overlay.active .promo-box {
+    transform: translateY(0) scale(1);
+  }
+
+  .promo-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .promo-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1.2rem;
+  }
+
+  .promo-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+
+  .promo-title em {
+    font-style: italic;
+    color: var(--sand);
+  }
+
+  .promo-body {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: #4a4a44;
+    margin-bottom: 1.5rem;
+  }
+
+  .promo-fine {
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    color: var(--warm-gray);
+    margin-bottom: 2rem;
+  }
+
+  .promo-cta {
+    display: inline-block;
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2.2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .promo-cta:hover { background: #333; }
+
+  @media (max-width: 480px) {
+    .promo-box { padding: 2.5rem 1.5rem 2rem; }
+  }
+
   /* ─── MODAL ─── */
   .modal-overlay {
     position: fixed;
@@ -1559,6 +1662,18 @@
   </div>
 </footer>
 
+<!-- Promo popup -->
+<div class="promo-overlay" id="promoOverlay" onclick="closePromoOnOverlay(event)">
+  <div class="promo-box">
+    <button class="promo-close" onclick="closePromo()" aria-label="Cerrar">✕</button>
+    <div class="promo-eyebrow">🎉 nüdo cumple 1 año</div>
+    <div class="promo-title">¡Estamos de <em>aniversario</em>!</div>
+    <div class="promo-body">En compras mayores a $1,200 te llevas un Mesh Hat de regalo.</div>
+    <div class="promo-fine">Válido hasta el 31 de agosto de 2026.</div>
+    <a href="#productos" class="promo-cta" onclick="closePromo()">Ver colección</a>
+  </div>
+</div>
+
 <!-- MODALS -->
 <div class="modal-overlay" id="modal" onclick="closeModalOnOverlay(event)">
   <div class="modal" id="modal-content">
@@ -1581,6 +1696,28 @@
 </div>
 
 <script>
+  // ─── PROMO POPUP (aniversario) ───
+  // La promo deja de mostrarse automáticamente después de esta fecha.
+  const PROMO_END_DATE = new Date('2026-08-31T23:59:59');
+
+  function closePromo() {
+    document.getElementById('promoOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function closePromoOnOverlay(e) {
+    if (e.target === document.getElementById('promoOverlay')) closePromo();
+  }
+
+  if (new Date() <= PROMO_END_DATE) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('promoOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }, 1200);
+    });
+  }
+
   // ─── CURSOR ───
   const cursor = document.getElementById('cursor');
   document.addEventListener('mousemove', e => {
@@ -1730,6 +1867,7 @@
     if (e.key === 'Escape') {
       closeModal();
       closeMobileMenu();
+      closePromo();
     }
   });
 </script>
