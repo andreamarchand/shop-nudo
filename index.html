@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nüdo — handmade crochet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #fafaf8;
+    --cream: #f2ede6;
+    --warm-gray: #c8c0b4;
+    --beige: #d4c4a8;
+    --sand: #b8a88a;
+    --text: #1a1a18;
+    --accent: #2a2a2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: var(--black);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+    mix-blend-mode: multiply;
+  }
+  .cursor.grow { width: 48px; height: 48px; opacity: 0.3; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+
+  .hero-brand {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(6rem, 12vw, 11rem);
+    color: var(--black);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.2s;
+  }
+
+  .hero-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--black);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.5s;
+  }
+
+  .hero-contact {
+    margin-top: 4rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--black);
+    animation: fadeUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.7s;
+  }
+
+  .hero-contact a { color: var(--warm-gray); text-decoration: none; }
+  .hero-contact a:hover { color: var(--white); }
+
+  .hero-right {
+    background: var(--cream);
+    display: block;
+    grid-template-rows: 1fr 1fr;
+    gap: 0;
+    overflow: hidden;
+  }
+.hero-right {
+  background: var(--cream);
+  display: block;
+  gap: 0;
+  overflow: hidden;
+}
+
+.hero-img-full {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-img-full img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+  .hero-img-top, .hero-img-bottom {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hero-img-top img, .hero-img-bottom img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transform: scale(1.05);
+    transition: transform 8s ease;
+    display: block;
+  }
+.hero-img-top img {
+  object-position: center center;
+}
+
+.hero-img-bottom img {
+  object-position: center 35%;
+}
+  .hero-right:hover .hero-img-top img,
+  .hero-right:hover .hero-img-bottom img {
+    transform: scale(1);
+  }
+
+  /* Animated texture overlay */
+  .hero-left::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.08;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    mix-blend-mode: difference;
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 0.5; }
+
+  /* ─── MOBILE NAV TOGGLE ─── */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 26px;
+    height: 20px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 101;
+    position: relative;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--white);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle.active span:nth-child(2) { opacity: 0; }
+  .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .mobile-menu.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .mobile-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .mobile-menu a {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    display: inline-block;
+  }
+
+  .mobile-menu.active a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-menu.active li:nth-child(1) a { transition-delay: 0.05s; }
+  .mobile-menu.active li:nth-child(2) a { transition-delay: 0.1s; }
+  .mobile-menu.active li:nth-child(3) a { transition-delay: 0.15s; }
+  .mobile-menu.active li:nth-child(4) a { transition-delay: 0.2s; }
+
+  .mobile-menu-contact {
+    position: absolute;
+    bottom: 3rem;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--warm-gray);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.4s ease 0.25s;
+  }
+
+  .mobile-menu.active .mobile-menu-contact { opacity: 1; }
+
+  .mobile-menu-contact a {
+    color: var(--warm-gray);
+    text-decoration: none;
+    font-size: inherit;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── MANIFESTO ─── */
+  .manifesto {
+    padding: 8rem 4rem 6rem;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+    animation-delay: 0.3s;
+  }
+
+  .manifesto-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 2rem;
+  }
+
+  .manifesto-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  .manifesto-title em {
+    font-style: italic;
+    color: var(--sand);
+  }
+
+  .manifesto-body {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: #4a4a44;
+    max-width: 600px;
+    column-count: 1;
+  }
+
+  .manifesto-body p + p { margin-top: 1.5rem; }
+
+  /* ─── MATERIAL ─── */
+  .material {
+    background: var(--white);
+    color: var(--black);
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .material-text .eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1.5rem;
+  }
+
+  .material-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+  }
+
+  .material-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .feature-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .feature-num {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--sand);
+    padding-top: 0.2rem;
+    min-width: 2rem;
+  }
+
+  .feature-content strong {
+    display: block;
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+
+  .feature-content p {
+    font-size: 0.72rem;
+    color: #4a4a44;
+    line-height: 1.7;
+  }
+
+  .material-visual {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 2px;
+  }
+
+  .material-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+  }
+
+  /* ─── PRODUCTS ─── */
+  .products {
+    padding: 8rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0dbd2;
+  }
+
+  .section-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1;
+  }
+
+  .section-header p {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sand);
+  }
+
+  /* Product filter tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid #e0dbd2;
+  }
+
+  .filter-tab {
+    padding: 1rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: none;
+    color: var(--warm-gray);
+    transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+
+  .filter-tab.active {
+    color: var(--black);
+    border-bottom-color: var(--black);
+  }
+
+  .filter-tab:hover { color: var(--black); }
+
+  /* Product grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem 2rem;
+  }
+
+  .product-card {
+    position: relative;
+    cursor: none;
+  }
+
+  .product-card[data-category] {
+    transition: opacity 0.4s, transform 0.4s;
+  }
+
+  .product-card.hidden {
+    display: none;
+  }
+
+  .product-img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+
+  .product-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .product-card:hover .product-img-wrap img {
+    transform: scale(1.08);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    background: var(--black);
+    color: var(--white);
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    z-index: 2;
+  }
+
+  .product-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.7) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+  }
+
+  .product-card:hover .product-overlay {
+    opacity: 1;
+  }
+
+  .product-cta {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: none;
+    border: 1px solid rgba(255,255,255,0.6);
+    padding: 0.7rem 1.2rem;
+    cursor: none;
+    transition: background 0.2s;
+    font-family: 'DM Mono', monospace;
+  }
+  .product-cta:hover { background: var(--white); color: var(--black); }
+
+  .product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .product-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+  }
+
+  .product-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .product-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    text-align: right;
+  }
+
+  .product-price span {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    font-size: 0.55rem;
+  }
+
+  /* Color swatches on product card */
+  .color-dots {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    cursor: none;
+    transition: transform 0.2s;
+  }
+  .color-dot:hover { transform: scale(1.3); }
+
+  /* ─── CUSTOMIZE CTA ─── */
+  .customize-section {
+    background: var(--cream);
+    padding: 8rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .customize-text .eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1.5rem;
+  }
+
+  .customize-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+  }
+
+  .customize-text p {
+    font-size: 0.85rem;
+    line-height: 1.9;
+    color: #4a4a44;
+    margin-bottom: 2.5rem;
+  }
+
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.2rem;
+    background: var(--white);
+    transition: transform 0.2s;
+  }
+
+  .step:hover { transform: translateX(8px); }
+
+  .step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--beige);
+    line-height: 1;
+    min-width: 2.5rem;
+  }
+
+  .step-content strong {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .step-content p {
+    font-size: 0.7rem;
+    color: var(--warm-gray);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .customize-palette {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .palette-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.5rem;
+  }
+
+  .palette-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  .swatch {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .swatch:hover {
+    transform: scale(1.1) translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .swatch::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--black);
+    color: var(--white);
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.5rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  .swatch:hover::after { opacity: 1; }
+
+  /* ─── SHIPPING ─── */
+  .shipping {
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid #e0dbd2;
+  }
+
+  .shipping-item {
+    padding: 3rem;
+    border-right: 1px solid #e0dbd2;
+  }
+  .shipping-item:last-child { border-right: none; }
+
+  .shipping-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .shipping-item h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .shipping-item p {
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: #6a6a62;
+  }
+
+  /* ─── GALLERY / LOOKBOOK ─── */
+  .lookbook {
+    background: var(--black);
+    padding: 6rem 4rem;
+    overflow: hidden;
+  }
+
+  .lookbook-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+
+  .lookbook-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    color: var(--white);
+  }
+
+  .lookbook-scroll {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+  }
+
+  .lookbook-scroll::-webkit-scrollbar { display: none; }
+
+  .lookbook-item {
+    flex: 0 0 300px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+    scroll-snap-align: start;
+    cursor: none;
+  }
+
+  .lookbook-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(15%);
+    transition: transform 0.6s ease, filter 0.4s;
+  }
+
+  .lookbook-item:hover img {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+  }
+
+  /* ─── CONTACT/FOOTER ─── */
+  footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 6rem 4rem 3rem;
+    border-top: 1px solid #222;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+  }
+
+  .footer-brand .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-brand p {
+    font-size: 0.72rem;
+    color: var(--warm-gray);
+    line-height: 1.8;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .footer-col ul li {
+    font-size: 0.75rem;
+    color: #888;
+    transition: color 0.2s;
+    cursor: none;
+  }
+
+  .footer-col ul li:hover { color: var(--white); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid #222;
+    font-size: 0.6rem;
+    color: #555;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,10,0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--white);
+    width: min(900px, 90vw);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transform: translateY(20px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal { transform: translateY(0); }
+
+  .modal-img {
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .modal-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .modal-body {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-close {
+    align-self: flex-end;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: none;
+    margin-bottom: 2rem;
+    color: var(--text);
+  }
+
+  .modal-eyebrow {
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sand);
+    margin-bottom: 1rem;
+  }
+
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-price {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .modal-desc {
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #5a5a52;
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  .modal-colors-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 0.8rem;
+  }
+
+  .modal-swatches {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .modal-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: none;
+    border: 2px solid transparent;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .modal-swatch:hover, .modal-swatch.selected {
+    border-color: var(--black);
+    transform: scale(1.15);
+  }
+
+  .modal-btn {
+    background: var(--black);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .modal-btn:hover { background: #333; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger children */
+  .stagger .reveal:nth-child(1) { transition-delay: 0s; }
+  .stagger .reveal:nth-child(2) { transition-delay: 0.1s; }
+  .stagger .reveal:nth-child(3) { transition-delay: 0.2s; }
+  .stagger .reveal:nth-child(4) { transition-delay: 0.3s; }
+  .stagger .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+  /* ─── MARQUEE ─── */
+  .marquee-wrap {
+    overflow: hidden;
+    background: var(--black);
+    padding: 1.2rem 0;
+    border-top: 1px solid #222;
+    border-bottom: 1px solid #222;
+  }
+
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 20s linear infinite;
+  }
+
+  .marquee-track span {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--white);
+    padding: 0 3rem;
+    opacity: 0.6;
+  }
+
+  .marquee-track span.accent {
+    color: var(--beige);
+    opacity: 1;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--black); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    nav .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 6rem 1.5rem 2.5rem; min-height: 0; }
+    .hero-logo { font-size: clamp(3.5rem, 16vw, 5.5rem); }
+    .hero-right { display: block; height: 55vh; }
+    .manifesto, .products { padding: 4rem 1.5rem; }
+    .material { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+    .material-visual { height: 300px; }
+    .products-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem 1rem; }
+    .customize-section { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+    .shipping { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+    .shipping-item { border-right: none; border-bottom: 1px solid #e0dbd2; }
+    .modal { grid-template-columns: 1fr; }
+    .modal-img { min-height: 250px; }
+    .lookbook { padding: 4rem 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    footer { padding: 4rem 1.5rem 2rem; }
+    body { cursor: auto; }
+    .cursor { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .palette-swatches { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">nüdo</a>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#personaliza">Personaliza</a></li>
+    <li><a href="#envios">Envíos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile menu overlay -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#productos" onclick="closeMobileMenu()">Productos</a></li>
+    <li><a href="#personaliza" onclick="closeMobileMenu()">Personaliza</a></li>
+    <li><a href="#envios" onclick="closeMobileMenu()">Envíos</a></li>
+    <li><a href="#contacto" onclick="closeMobileMenu()">Contacto</a></li>
+  </ul>
+  <div class="mobile-menu-contact">
+    <a href="https://instagram.com/nudo.____" target="_blank">@NUDO.____</a>
+    &nbsp;·&nbsp;
+    <a href="tel:5540712077">5540712077</a>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-brand">
+      <div class="hero-logo">nüdo</div>
+      <div class="hero-tagline">handmade crochet · hecho con amor</div>
+      <div class="hero-contact">
+        <a href="https://instagram.com/nudo.____" target="_blank">@NUDO.____</a>
+        &nbsp;&nbsp;·&nbsp;&nbsp;
+        <a href="tel:5540712077">5540712077</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+  <div class="hero-img-full">
+    <img src="fotos/hero-2.jpeg" alt="nüdo hero" />
+  </div>
+</div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>trapillo reciclado</span><span class="accent">·</span>
+    <span>hecho a mano</span><span class="accent">·</span>
+    <span>100% personalizable</span><span class="accent">·</span>
+    <span>trapillo reciclado</span><span class="accent">·</span>
+    <span>hecho con amor</span><span class="accent">·</span>
+    <span>cada pieza es única</span><span class="accent">·</span>
+    <span>trapillo reciclado</span><span class="accent">·</span>
+    <span>hecho a mano</span><span class="accent">·</span>
+    <span>100% personalizable</span><span class="accent">·</span>
+    <span>trapillo reciclado</span><span class="accent">·</span>
+    <span>hecho con amor</span><span class="accent">·</span>
+    <span>cada pieza es única</span><span class="accent">·</span>
+  </div>
+</div>
+
+<!-- Manifesto -->
+<section class="manifesto reveal">
+  <div class="manifesto-eyebrow">A quien nüdo le esté sonriendo,</div>
+  <h1 class="manifesto-title">
+    Hecho para acompañarte<br>
+    en <em>cada</em> momento del día
+  </h1>
+  <div class="manifesto-body">
+    <p>nüdo nace de una pasión y del deseo de hacer del crochet algo que no solo se use, sino que te acompañe. Que esté contigo en los trayectos, en el escritorio, en los días largos y en los ratitos de pausa.</p>
+    <p>Cada pieza está hecha a mano, con intención, con paciencia y con mucho corazón. Para mí, crear y pensar que un pedacito de mí puede ir contigo a donde vayas es un privilegio.</p>
+  </div>
+</section>
+
+<!-- Material Section -->
+<section class="material">
+  <div class="material-text reveal">
+    <div class="eyebrow">¿Qué usamos?</div>
+    <h2>Trapillo de alta calidad</h2>
+    <div class="material-features">
+      <div class="feature-item">
+        <span class="feature-num">01</span>
+        <div class="feature-content">
+          <strong>Material reciclado</strong>
+          <p>El trapillo es un hilo de alta calidad hecho a partir de retales de tela reciclada. Resistente, suave y sostenible.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-num">02</span>
+        <div class="feature-content">
+          <strong>Lavado seguro</strong>
+          <p>Se puede lavar en lavadora sin aspas, ciclo delicado, dentro de una funda. Secar sobre plano, secadora o tintorería.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-num">03</span>
+        <div class="feature-content">
+          <strong>Hecho a mano</strong>
+          <p>Cada punto, cada nudo tejido con atención y cariño. No hay dos piezas exactamente iguales.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="material-visual reveal">
+    <img src="fotos/material-trapillo1.jpeg" alt="trapillo nüdo" />
+  </div>
+</section>
+
+<!-- Products -->
+<section class="products" id="productos">
+  <div class="section-header reveal">
+    <h2>Colección 2026</h2>
+    <p>Todas personalizables</p>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterProducts('all')">Todo</button>
+    <button class="filter-tab" onclick="filterProducts('tech')">Tech Sleeves</button>
+    <button class="filter-tab" onclick="filterProducts('bolsas')">Bolsas</button>
+    <button class="filter-tab" onclick="filterProducts('accesorios')">Accesorios</button>
+  </div>
+
+  <div class="products-grid stagger">
+
+    <!-- Funda Laptop -->
+    <div class="product-card reveal" data-category="tech" onclick="openModal('laptop')">
+      <div class="product-img-wrap">
+        <span class="product-badge">Bestseller</span>
+        <img src="fotos/laptop-1.jpeg" alt="Funda para laptop nüdo" />
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Funda Laptop</div>
+          <div class="product-sub">MacBook Air · MacBook Pro</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#d4bfa0" title="arena"></div>
+            <div class="color-dot" style="background:#8ba3b8" title="azul"></div>
+            <div class="color-dot" style="background:#4a5a3a" title="olivo"></div>
+            <div class="color-dot" style="background:#3a2a1a" title="chocolate"></div>
+            <div class="color-dot" style="background:#f0f0f0" title="blanco"></div>
+            <div class="color-dot" style="background:#1a1a1a" title="negro"></div>
+          </div>
+        </div>
+        <div class="product-price">$900<span>cotizar otros modelos</span></div>
+      </div>
+    </div>
+
+    <!-- Funda iPad -->
+    <div class="product-card reveal" data-category="tech" onclick="openModal('ipad')">
+      <div class="product-img-wrap">
+        <img src="fotos/ipad-1.jpeg" alt="Funda iPad nüdo" />
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Funda iPad</div>
+          <div class="product-sub">iPad Pro · otros modelos</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#8ba3b8"></div>
+            <div class="color-dot" style="background:#f8d0c0"></div>
+            <div class="color-dot" style="background:#f0f0f0"></div>
+            <div class="color-dot" style="background:#4a5a3a"></div>
+            <div class="color-dot" style="background:#c8905a"></div>
+          </div>
+        </div>
+        <div class="product-price">$800<span>cotizar otros modelos</span></div>
+      </div>
+    </div>
+
+    <!-- Clutch -->
+    <div class="product-card reveal" data-category="bolsas" onclick="openModal('clutch')">
+      <div class="product-img-wrap">
+        <img src="fotos/clutch-1.jpeg" alt="Clutch nüdo" />
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Clutch</div>
+          <div class="product-sub">Un solo tamaño</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#8ba3b8"></div>
+            <div class="color-dot" style="background:#3a2018"></div>
+            <div class="color-dot" style="background:#f8d0c0"></div>
+            <div class="color-dot" style="background:#1a1a1a"></div>
+          </div>
+        </div>
+        <div class="product-price">$900<span>un solo tamaño</span></div>
+      </div>
+    </div>
+
+    <!-- Hand Bag -->
+    <div class="product-card reveal" data-category="bolsas" onclick="openModal('handbag')">
+      <div class="product-img-wrap">
+        <span class="product-badge">Nuevo</span>
+        <img src="fotos/handbag-1.jpeg" alt="Hand bag nüdo" />
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Hand Bag</div>
+          <div class="product-sub">Un solo tamaño</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#8ba3b8"></div>
+            <div class="color-dot" style="background:#c8b078"></div>
+            <div class="color-dot" style="background:#f0f0f0"></div>
+            <div class="color-dot" style="background:#3a2018"></div>
+          </div>
+        </div>
+        <div class="product-price">$900<span>un solo tamaño</span></div>
+      </div>
+    </div>
+
+    <!-- Mesh Hat -->
+    <div class="product-card reveal" data-category="accesorios" onclick="openModal('hat')">
+      <div class="product-img-wrap">
+        <img src="fotos/meshat-1.jpeg" alt="Mesh hat nüdo" />
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Mesh Hat</div>
+          <div class="product-sub">Un solo tamaño</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#e8e0c0"></div>
+            <div class="color-dot" style="background:#c83040"></div>
+            <div class="color-dot" style="background:#f0c0b0"></div>
+            <div class="color-dot" style="background:#203040"></div>
+            <div class="color-dot" style="background:#506030"></div>
+            <div class="color-dot" style="background:#1a1a1a"></div>
+          </div>
+        </div>
+        <div class="product-price">$350<span>un solo tamaño</span></div>
+      </div>
+    </div>
+
+    <!-- Kindle / especial -->
+    <div class="product-card reveal" data-category="tech" onclick="openModal('kindle')">
+      <div class="product-img-wrap">
+        <span class="product-badge">Cotizar</span>
+        <img src="fotos/kindle-1.jpeg" alt="Funda Kindle">
+        <div class="product-overlay">
+          <button class="product-cta">Ver detalles</button>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <div class="product-name">Funda Kindle</div>
+          <div class="product-sub">Y otros dispositivos</div>
+          <div class="color-dots">
+            <div class="color-dot" style="background:#d4b890"></div>
+            <div class="color-dot" style="background:#8ba3b8"></div>
+            <div class="color-dot" style="background:#f8d0c0"></div>
+            <div class="color-dot" style="background:#1a1a1a"></div>
+          </div>
+        </div>
+        <div class="product-price">—<span>precio a cotizar</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Customize Section -->
+<section class="customize-section" id="personaliza">
+  <div class="customize-text reveal">
+    <div class="eyebrow">100% personalizable</div>
+    <h2>Diseña la tuya</h2>
+    <p>Cada pieza de nüdo puede ser exactamente como tú la imaginás. Elige el tamaño según tu dispositivo y los colores que más te representen — desde un tono único hasta combinaciones que cuenten tu historia.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <strong>Elige tu producto y tamaño</strong>
+          <p>Dinos el modelo exacto de tu compu, iPad, Kindle o el uso que le quieres dar a tu bolsa.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <strong>Escoge tus colores</strong>
+          <p>Uno o varios. Puedes ir a lo seguro con un neutro o aventurarte con combinaciones que te hagan sonreír.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <strong>Escríbeme y lo hacemos</strong>
+          <p>Mándame un mensaje por Instagram o WhatsApp con tu pedido y coordinamos los detalles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="customize-palette reveal">
+    <div class="palette-title">Paleta de colores disponibles</div>
+    <div class="palette-swatches">
+      <div class="swatch" style="background:#e0e0e0" data-name="gris claro"></div>
+      <div class="swatch" style="background:#7adce0" data-name="turquesa"></div>
+      <div class="swatch" style="background:#5878b8" data-name="azul medio"></div>
+      <div class="swatch" style="background:#58a840" data-name="verde"></div>
+      <div class="swatch" style="background:#c01830" data-name="rojo oscuro"></div>
+      <div class="swatch" style="background:#e8e050" data-name="amarillo"></div>
+      <div class="swatch" style="background:#a07050" data-name="café"></div>
+      <div class="swatch" style="background:#501828" data-name="vino"></div>
+      <div class="swatch" style="background:#f0a090" data-name="salmón"></div>
+      <div class="swatch" style="background:#485830" data-name="olivo"></div>
+      <div class="swatch" style="background:#101010" data-name="negro"></div>
+      <div class="swatch" style="background:#8ba3b8" data-name="azul cielo"></div>
+      <div class="swatch" style="background:#d4bfa0" data-name="arena"></div>
+      <div class="swatch" style="background:#f8e0d8" data-name="rosa pastel"></div>
+      <div class="swatch" style="background:#f8f0f0" data-name="blanco"></div>
+    </div>
+    <div style="margin-top:2rem;">
+      <div class="palette-title">¿No encuentras tu color?</div>
+      <p style="font-size:0.72rem; color:#6a6a62; line-height:1.8; margin-top:0.5rem;">Escríbeme y buscamos juntas — el trapillo viene en muchos colores y podemos conseguir algo especial para ti.</p>
+    </div>
+
+    <div style="margin-top:2.5rem; display:flex; gap:1rem; flex-wrap:wrap;">
+      <a href="https://wa.me/525540712077" class="modal-btn" target="_blank" style="flex:1; min-width:140px;">
+        WhatsApp
+      </a>
+      <a href="https://instagram.com/nudo.____" class="modal-btn" target="_blank" style="flex:1; min-width:140px; background:#555;">
+        Instagram
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Shipping -->
+<section class="shipping" id="envios">
+  <div class="shipping-item reveal">
+    <div class="shipping-icon">📦</div>
+    <h3>Pickup</h3>
+    <p>Recoge tu pedido en Interlomas. Coordinamos el lugar exacto al momento de tu compra. Sin costo adicional.</p>
+  </div>
+  <div class="shipping-item reveal">
+    <div class="shipping-icon">🚗</div>
+    <h3>Envío a domicilio</h3>
+    <p>Cotizamos tu envío según tu ubicación. El costo varía dependiendo de la zona — te damos el precio exacto al pedir.</p>
+  </div>
+  <div class="shipping-item reveal">
+    <div class="shipping-icon">⏱</div>
+    <h3>Tiempos de entrega</h3>
+    <p>De 1 a 2 semanas dependiendo del stock disponible. Si tienes prisa, escríbeme y vemos qué se puede hacer ü</p>
+  </div>
+</section>
+
+<!-- Lookbook -->
+<section class="lookbook">
+  <div class="lookbook-header reveal">
+    <h2>Lookbook</h2>
+    <span style="font-size:0.6rem; letter-spacing:0.2em; color:#888; text-transform:uppercase;">desliza →</span>
+  </div>
+  <div class="lookbook-scroll">
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-1.jpeg" alt="nüdo">
+    </div>
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-2.jpeg" alt="nüdo">
+    </div>
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-3.jpeg" alt="nüdo">
+    </div>
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-4.jpeg" alt="nüdo">
+    </div>
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-5.jpeg" alt="nüdo">
+    </div>
+    <div class="lookbook-item">
+      <img src="fotos/lookbook-6.jpeg" alt="nüdo">
+    </div>
+  </div>
+  <div style="margin-top:2rem; text-align:center;">
+    <a href="https://instagram.com/nudo.____" target="_blank" class="modal-btn" style="display:inline-block;">
+      Ver más en @NUDO.____
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="contacto">
+  <div class="footer-grid">
+    <div class="footer-brand reveal">
+      <div class="logo">nüdo</div>
+      <p>handmade crochet hecho con pasión, paciencia y mucho corazón. Cada pieza única, cada pieza tuya.</p>
+      <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
+        <a href="https://wa.me/525540712077?text=Hola%20nüdo,%20vi%20sus%20productos%20y%20me%20gustaría%20cotizar%20una%20pieza.%20😊" class="modal-btn" target="_blank" style="font-size:0.55rem;">WhatsApp</a>
+        <a href="https://instagram.com/nudo.____" class="modal-btn" target="_blank" style="font-size:0.55rem; background:#444;">@NUDO.____</a>
+      </div>
+    </div>
+    <div class="footer-col reveal">
+      <h4>Productos</h4>
+      <ul>
+        <li onclick="filterProducts('tech'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Fundas Laptop</li>
+        <li onclick="filterProducts('tech'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Fundas iPad</li>
+        <li onclick="filterProducts('tech'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Fundas Kindle</li>
+        <li onclick="filterProducts('bolsas'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Clutch</li>
+        <li onclick="filterProducts('bolsas'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Hand Bags</li>
+        <li onclick="filterProducts('accesorios'); document.querySelector('#productos').scrollIntoView({behavior:'smooth'})">Mesh Hat</li>
+      </ul>
+    </div>
+    <div class="footer-col reveal">
+      <h4>Contacto</h4>
+      <ul>
+        <li>@NUDO.____</li>
+        <li>5540712077</li>
+        <li>Pickup: Interlomas</li>
+        <li>Envíos a domicilio</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 nüdo handmade crochet — Andrea Marchand</span>
+    <span>Hecho con ♡</span>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal" onclick="closeModalOnOverlay(event)">
+  <div class="modal" id="modal-content">
+    <div class="modal-img">
+      <img id="modal-img" src="" alt="" />
+    </div>
+    <div class="modal-body">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-eyebrow" id="modal-eyebrow"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-price" id="modal-price"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-colors-title">Elige tus colores</div>
+      <div class="modal-swatches" id="modal-swatches"></div>
+      <a id="modal-link" class="modal-btn" href="https://wa.me/525540712077?text=Hola%20nüdo,%20vi%20sus%20productos%20y%20me%20gustaría%20cotizar%20una%20pieza.%20😊" target="_blank">
+        Pedir por WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── CURSOR ───
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .product-card, .swatch, .color-dot, .filter-tab, .step').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+  });
+
+  // ─── MOBILE MENU ───
+  function toggleMobileMenu() {
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('mobileMenu');
+    const isActive = menu.classList.toggle('active');
+    toggle.classList.toggle('active', isActive);
+    toggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+    document.body.style.overflow = isActive ? 'hidden' : '';
+  }
+
+  function closeMobileMenu() {
+    document.getElementById('navToggle').classList.remove('active');
+    document.getElementById('mobileMenu').classList.remove('active');
+    document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  // ─── SCROLL REVEAL ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── FILTER ───
+  function filterProducts(category) {
+    const cards = document.querySelectorAll('.product-card');
+    const tabs = document.querySelectorAll('.filter-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    cards.forEach(card => {
+      if (category === 'all' || card.dataset.category === category) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+
+  // ─── MODAL DATA ───
+  const products = {
+    laptop: {
+      eyebrow: 'Tech Sleeve',
+      title: 'Funda Laptop',
+      price: '$900',
+      desc: 'Hecha a mano en trapillo reciclado de alta calidad. Diseñada para MacBook Air y MacBook Pro — también cotizamos otros modelos de laptop. Protege tu compu con estilo y suma personalidad a tu día a día.',
+      img: 'fotos/laptop-1.jpeg',
+      colors: ['#e0e0e0','#7adce0','#5878b8','#58a840','#c01830','#e8e050','#a07050','#501828','#f0a090','#485830','#101010','#8ba3b8','#d4bfa0','#f8e0d8','#f8f0f0']
+    },
+    ipad: {
+      eyebrow: 'Tech Sleeve',
+      title: 'Funda iPad',
+      price: '$800',
+      desc: 'Perfecta para tu iPad Pro. Tejida en trapillo reciclado, suave por dentro y resistente por fuera. También cotizamos otros modelos de iPad y tablets. Una forma bonita de cuidar tu dispositivo.',
+      img: 'fotos/ipad-1.jpeg',
+      colors: ['#8ba3b8','#f8d0c0','#f0f0f0','#4a5a3a','#c8905a','#101010','#d4bfa0','#f8e0d8']
+    },
+    clutch: {
+      eyebrow: 'Bolsa',
+      title: 'Clutch',
+      price: '$900',
+      desc: 'El clutch nüdo es la pieza perfecta para salir de noche o para llevar lo esencial al día. Tejido grueso, forma redondeada y acabado interior cuidado. Un solo tamaño, personalizable en tus colores favoritos.',
+      img: 'fotos/clutch-1.jpeg',
+      colors: ['#8ba3b8','#3a2018','#f8d0c0','#1a1a1a','#d4bfa0','#c01830','#485830','#e0e0e0']
+    },
+    handbag: {
+      eyebrow: 'Bolsa',
+      title: 'Hand Bag',
+      price: '$900',
+      desc: 'La hand bag de nüdo tiene todo el carácter que necesitas. Asas cortas, cuerpo generoso y tejido artesanal que la hace única. Perfecta para el día a día, para la playa o para cualquier plan que se te ocurra.',
+      img: 'fotos/handbag-1.jpeg',
+      colors: ['#8ba3b8','#c8b078','#f0f0f0','#3a2018','#d4bfa0','#1a1a1a','#f8e0d8','#485830']
+    },
+    hat: {
+      eyebrow: 'Accesorio',
+      title: 'Mesh Hat',
+      price: '$350',
+      desc: 'El mesh hat es el accesorio del verano. Tejido en punto red con trapillo más fino, deja pasar el aire y se adapta a tu cabeza. Viene en una amplia paleta de colores para que elijas el que más va contigo.',
+      img: 'fotos/meshat-1.jpeg',
+      colors: ['#e8e0c0','#c01830','#f0c0b0','#203040','#506030','#1a1a1a','#e0e0e0','#7adce0','#f8e0d8','#a07050','#101010','#8ba3b8']
+    },
+    kindle: {
+      eyebrow: 'Tech Sleeve',
+      title: 'Funda Kindle',
+      price: 'Cotizar',
+      desc: '¿Tienes Kindle u otro dispositivo que no está en el catálogo? No hay problema — cuéntame las medidas y hacemos tu funda personalizada. También aplica para tablets, e-readers y cualquier gadget que quieras proteger con estilo.',
+      img: 'fotos/material-trapillo2.jpeg',
+      colors: ['#d4b890','#8ba3b8','#f8d0c0','#1a1a1a','#e0e0e0','#485830']
+    }
+  };
+
+  function openModal(id) {
+    const p = products[id];
+    document.getElementById('modal-eyebrow').textContent = p.eyebrow;
+    document.getElementById('modal-title').textContent = p.title;
+    document.getElementById('modal-price').textContent = p.price;
+    document.getElementById('modal-desc').textContent = p.desc;
+    document.getElementById('modal-img').src = p.img;
+    document.getElementById('modal-img').alt = p.title;
+
+    const swatchContainer = document.getElementById('modal-swatches');
+    swatchContainer.innerHTML = '';
+    p.colors.forEach(color => {
+      const s = document.createElement('div');
+      s.className = 'modal-swatch';
+      s.style.background = color;
+      s.onclick = () => {
+        document.querySelectorAll('.modal-swatch').forEach(x => x.classList.remove('selected'));
+        s.classList.add('selected');
+      };
+      swatchContainer.appendChild(s);
+    });
+
+    // Update WhatsApp link with product name
+    const link = document.getElementById('modal-link');
+    link.href = `https://wa.me/525540712077?text=Hola! Me interesa el ${p.title} de nüdo`;
+
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOnOverlay(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeMobileMenu();
+    }
+  });
+</script>
+</body>
+</html>
